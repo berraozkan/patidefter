@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import type { CareRecord, CareType } from '../types'
 import { newId } from '../usePets'
+import { cardClass, inputClass, labelClass } from '../styles'
+import { PrimaryButton } from './ui'
 
 interface Props {
   onSave: (record: CareRecord) => void
@@ -26,40 +28,36 @@ export default function CareRecordForm({ onSave, onCancel }: Props) {
     onSave({ id: newId(), type, name: name.trim(), date })
   }
 
-  const input =
-    'w-full rounded-lg border border-stone-300 px-3 py-2 focus:border-amber-500 focus:outline-none'
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-xl bg-white p-5 shadow-sm">
-      <h3 className="font-semibold">Yeni kayıt</h3>
+    <form onSubmit={handleSubmit} className={`${cardClass} space-y-5 p-6`}>
+      <h3 className="text-xl font-extrabold tracking-tight">Yeni kayıt</h3>
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tür</span>
-          <select className={input} value={type} onChange={(e) => setType(e.target.value as CareType)}>
+          <span className={labelClass}>Tür</span>
+          <select className={inputClass} value={type} onChange={(e) => setType(e.target.value as CareType)}>
             <option>Aşı</option>
             <option>İç parazit</option>
             <option>Dış parazit</option>
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Ad</span>
-          <input className={input} value={name} onChange={(e) => setName(e.target.value)} placeholder={suggestions[type]} />
+          <span className={labelClass}>Ad</span>
+          <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} placeholder={suggestions[type]} />
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tarih</span>
-          <input type="date" className={input} value={date} onChange={(e) => setDate(e.target.value)} />
+          <span className={labelClass}>Tarih</span>
+          <input type="date" className={inputClass} value={date} onChange={(e) => setDate(e.target.value)} />
         </label>
       </div>
 
-      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+      {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-red-700" role="alert">{error}</p>}
 
       <div className="flex justify-end gap-2">
-        <button type="button" onClick={onCancel} className="rounded-lg px-4 py-2 text-stone-600 hover:bg-stone-100">
+        <button type="button" onClick={onCancel} className="rounded-full px-5 py-3 font-bold text-muted hover:bg-canvas">
           Vazgeç
         </button>
-        <button type="submit" className="rounded-lg bg-amber-500 px-4 py-2 font-medium text-white hover:bg-amber-600">
-          Kaydet
-        </button>
+        <PrimaryButton type="submit">Kaydet</PrimaryButton>
       </div>
     </form>
   )

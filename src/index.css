@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+/* Figma "PatiDefter" değişken koleksiyonundaki renkler */
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: #f3f8f8;
+  --color-ink: #17282b;
+  --color-muted: #6a7f83;
+  --color-line: #dde9ea;
+
+  --color-primary: #12968a;
+  --color-primary-dark: #0c7066;
+  --color-primary-soft: #d6f1ee;
+
+  --color-soon: #2f7fe0;
+  --color-soon-soft: #e0edfb;
+
+  --color-asi: #4f5bd5;
+  --color-asi-soft: #e6e8fb;
+  --color-ic: #4e7f1c;
+  --color-ic-soft: #e8f3da;
+  --color-dis: #8a4fbf;
+  --color-dis-soft: #f0e6fa;
+
+  --shadow-card: 0 4px 16px rgb(30 60 70 / 0.08);
+  --shadow-button: 0 4px 12px rgb(18 150 138 / 0.28);
+}
+
+body {
+  @apply bg-canvas text-ink antialiased;
+}

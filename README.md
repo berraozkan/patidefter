@@ -19,6 +19,11 @@ Görev takibi GitHub Projects üzerinde yapılmaktadır:
 - Tailwind CSS
 - Veriler tarayıcıda `localStorage` ile saklanır (sunucu gerekmez)
 
+## Tasarım
+
+Arayüz Figma'da tasarlandı (renk değişkenleri, bileşenler ve iki ekran):
+👉 [PatiDefter — Arayüz Tasarımı](https://www.figma.com/design/jlBgNrrQd4RT0ohqk4YD2E)
+
 ## Kurulum ve Çalıştırma
 
 Gereksinim: Node.js 18 veya üzeri
