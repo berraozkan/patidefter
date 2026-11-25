@@ -13,6 +13,7 @@ export interface Pet {
   id: string
   name: string
   species: Species
+  breed?: string
   birthDate: string // YYYY-MM-DD
   weightKg: number
   records: CareRecord[]

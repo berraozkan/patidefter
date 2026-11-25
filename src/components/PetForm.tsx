@@ -15,6 +15,7 @@ const today = todayISO
 export default function PetForm({ onSave, onCancel }: Props) {
   const [name, setName] = useState('')
   const [species, setSpecies] = useState<Species>('Kedi')
+  const [breed, setBreed] = useState('')
   const [birthDate, setBirthDate] = useState('')
   const [weight, setWeight] = useState('')
   const [error, setError] = useState('')
@@ -28,7 +29,7 @@ export default function PetForm({ onSave, onCancel }: Props) {
     if (!weight || Number.isNaN(weightKg) || weightKg <= 0)
       return setError('Geçerli bir kilo girin (ör. 4,2).')
 
-    onSave({ id: newId(), name: name.trim(), species, birthDate, weightKg, records: [] })
+    onSave({ id: newId(), name: name.trim(), species, breed: breed.trim() || undefined, birthDate, weightKg, records: [] })
   }
 
 
@@ -39,6 +40,13 @@ export default function PetForm({ onSave, onCancel }: Props) {
       <label className="block">
         <span className={labelClass}>İsim</span>
         <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} placeholder="ör. Bala" />
+      </label>
+
+      <label className="block">
+        <span className={labelClass}>
+          Cins <span className="font-normal text-muted">(isteğe bağlı)</span>
+        </span>
+        <input className={inputClass} value={breed} onChange={(e) => setBreed(e.target.value)} placeholder="ör. Norveç orman kedisi kırması" />
       </label>
 
       <div className="grid gap-4 sm:grid-cols-3">
