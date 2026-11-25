@@ -22,6 +22,7 @@ export function PetSummary({ pet, large = false }: { pet: Pet; large?: boolean }
         <p className={`leading-tight font-extrabold tracking-tight ${large ? 'text-3xl' : 'text-[22px]'}`}>{pet.name}</p>
         <div className="flex flex-wrap gap-1.5">
           <Chip>{pet.species}</Chip>
+          {pet.breed && <Chip>{pet.breed}</Chip>}
           <Chip>{ageText(pet.birthDate)}</Chip>
           <Chip>{pet.weightKg.toLocaleString('tr-TR')} kg</Chip>
         </div>
