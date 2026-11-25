@@ -11,7 +11,7 @@ Evcil hayvan sahipleri; aşı tarihlerini, parazit uygulamalarını ve veteriner
 ## Proje Panosu
 
 Görev takibi GitHub Projects üzerinde yapılmaktadır:
-👉 [PatiDefter Panosu](PANO_LINKI_BURAYA)
+👉 [PatiDefter Panosu](https://github.com/users/berraozkan/projects/5)
 
 ## Kullanılan Teknolojiler
 
@@ -29,7 +29,7 @@ Arayüz Figma'da tasarlandı (renk değişkenleri, bileşenler ve iki ekran):
 Gereksinim: Node.js 18 veya üzeri
 
 ```bash
-git clone https://github.com/KULLANICI_ADI/patidefter.git
+git clone https://github.com/berraozkan/patidefter.git
 cd patidefter
 npm install
 npm run dev
@@ -37,7 +37,7 @@ npm run dev
 
 Ardından tarayıcıda `http://localhost:5173` adresini açın.
 
-Canlı sürüm: [patidefter demo](DEMO_LINKI_BURAYA)
+Canlı sürüm: [patidefter demo](https://berraozkan.github.io/patidefter/)
 
 ## Geliştirilen Özellikler ve Nasıl Denenir
 
