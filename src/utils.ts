@@ -9,3 +9,21 @@ export function ageText(birthDate: string) {
   const m = months % 12
   return m ? `${y} yaş ${m} ay` : `${y} yaşında`
 }
+
+/** Yerel saate göre bugünün tarihi (YYYY-MM-DD). */
+export function todayISO() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+/** Bugünden verilen tarihe kaç gün var (geçmişse negatif). */
+export function daysUntil(date: string) {
+  const [y, m, d] = date.split('-').map(Number)
+  const [ty, tm, td] = todayISO().split('-').map(Number)
+  return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(ty, tm - 1, td)) / 86_400_000)
+}
+
+export function formatDate(date: string) {
+  const [y, m, d] = date.split('-').map(Number)
+  return new Date(y, m - 1, d).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+}

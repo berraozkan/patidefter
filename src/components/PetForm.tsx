@@ -1,13 +1,14 @@
 import { useState, type FormEvent } from 'react'
 import type { Pet, Species } from '../types'
 import { newId } from '../usePets'
+import { todayISO } from '../utils'
 
 interface Props {
   onSave: (pet: Pet) => void
   onCancel: () => void
 }
 
-const today = () => new Date().toISOString().slice(0, 10)
+const today = todayISO
 
 export default function PetForm({ onSave, onCancel }: Props) {
   const [name, setName] = useState('')
