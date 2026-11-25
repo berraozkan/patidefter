@@ -27,3 +27,10 @@ export function formatDate(date: string) {
   const [y, m, d] = date.split('-').map(Number)
   return new Date(y, m - 1, d).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
 }
+
+export function whenText(days: number) {
+  if (days === 0) return 'Bugün'
+  if (days === 1) return 'Yarın'
+  if (days > 0) return `${days} gün sonra`
+  return `${-days} gün önce`
+}

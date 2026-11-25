@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import type { Pet, Species } from '../types'
 import { newId } from '../usePets'
+import { cardClass, inputClass, labelClass } from '../styles'
+import { PrimaryButton } from './ui'
 import { todayISO } from '../utils'
 
 interface Props {
@@ -29,46 +31,42 @@ export default function PetForm({ onSave, onCancel }: Props) {
     onSave({ id: newId(), name: name.trim(), species, birthDate, weightKg, records: [] })
   }
 
-  const input =
-    'w-full rounded-lg border border-stone-300 px-3 py-2 focus:border-amber-500 focus:outline-none'
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-xl bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-semibold">Yeni hayvan</h2>
+    <form onSubmit={handleSubmit} className={`${cardClass} space-y-5 p-6`}>
+      <h2 className="text-xl font-extrabold tracking-tight">Yeni hayvan</h2>
 
       <label className="block">
-        <span className="mb-1 block text-sm font-medium">İsim</span>
-        <input className={input} value={name} onChange={(e) => setName(e.target.value)} placeholder="ör. Bala" />
+        <span className={labelClass}>İsim</span>
+        <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} placeholder="ör. Bala" />
       </label>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tür</span>
-          <select className={input} value={species} onChange={(e) => setSpecies(e.target.value as Species)}>
+          <span className={labelClass}>Tür</span>
+          <select className={inputClass} value={species} onChange={(e) => setSpecies(e.target.value as Species)}>
             <option>Kedi</option>
             <option>Köpek</option>
             <option>Diğer</option>
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Doğum tarihi</span>
-          <input type="date" max={today()} className={input} value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+          <span className={labelClass}>Doğum tarihi</span>
+          <input type="date" max={today()} className={inputClass} value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">Kilo (kg)</span>
-          <input inputMode="decimal" className={input} value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="4,2" />
+          <span className={labelClass}>Kilo (kg)</span>
+          <input inputMode="decimal" className={inputClass} value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="4,2" />
         </label>
       </div>
 
-      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+      {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-red-700" role="alert">{error}</p>}
 
       <div className="flex justify-end gap-2">
-        <button type="button" onClick={onCancel} className="rounded-lg px-4 py-2 text-stone-600 hover:bg-stone-100">
+        <button type="button" onClick={onCancel} className="rounded-full px-5 py-3 font-bold text-muted hover:bg-canvas">
           Vazgeç
         </button>
-        <button type="submit" className="rounded-lg bg-amber-500 px-4 py-2 font-medium text-white hover:bg-amber-600">
-          Kaydet
-        </button>
+        <PrimaryButton type="submit">Kaydet</PrimaryButton>
       </div>
     </form>
   )

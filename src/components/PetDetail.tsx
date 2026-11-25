@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import type { CareRecord, Pet } from '../types'
-import { daysUntil, formatDate } from '../utils'
+import { daysUntil, formatDate, whenText } from '../utils'
+import { cardClass } from '../styles'
 import CareRecordForm from './CareRecordForm'
-import PetCard from './PetCard'
+import { PetSummary } from './PetCard'
+import { PrimaryButton, TrashIcon, TypePill } from './ui'
 
 interface Props {
   pet: Pet
@@ -11,47 +13,80 @@ interface Props {
   onDeleteRecord: (recordId: string) => void
 }
 
-const typeStyle = {
-  Aşı: 'bg-sky-100 text-sky-800',
-  'İç parazit': 'bg-emerald-100 text-emerald-800',
-  'Dış parazit': 'bg-violet-100 text-violet-800',
-} as const
-
-function whenText(days: number) {
+function badgeText(days: number) {
   if (days === 0) return 'Bugün'
   if (days === 1) return 'Yarın'
-  if (days > 0) return `${days} gün sonra`
-  return `${-days} gün önce`
+  if (days > 0) return `${days} gün kaldı`
+  return whenText(days)
 }
 
 function RecordRow({ record, onDelete }: { record: CareRecord; onDelete: () => void }) {
   const days = daysUntil(record.date)
   const soon = days >= 0 && days <= 7
+  const past = days < 0
+  const [y, m, d] = record.date.split('-').map(Number)
+  const month = new Date(y, m - 1, d).toLocaleDateString('tr-TR', { month: 'short' }).toLocaleUpperCase('tr-TR')
+
   return (
     <li
       data-soon={soon || undefined}
-      className={`flex items-center justify-between gap-3 rounded-lg p-3 ${
-        soon ? 'border-2 border-amber-400 bg-amber-100' : 'bg-white'
-      }`}
+      className={`flex items-center gap-4 rounded-[18px] border px-4 py-3.5 ${
+        soon ? 'border-[1.5px] border-soon bg-soon-soft' : 'border-line bg-white'
+      } ${past ? 'opacity-75' : ''}`}
     >
-      <div className="flex items-center gap-3">
-        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${typeStyle[record.type]}`}>{record.type}</span>
-        <div>
-          <p className="font-medium">{record.name}</p>
-          <p className="text-sm text-stone-500">
-            {formatDate(record.date)} · {whenText(days)}
-            {soon && ' ⏰'}
-          </p>
-        </div>
+      <div
+        className={`grid size-14 shrink-0 place-content-center rounded-[14px] text-center ${soon ? 'bg-white' : 'bg-canvas'}`}
+      >
+        <span className="text-xl leading-none font-extrabold">{String(d).padStart(2, '0')}</span>
+        <span className="mt-1 text-[11px] leading-none font-extrabold text-muted">{month}</span>
       </div>
+
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-bold">{record.name}</p>
+          <TypePill type={record.type} />
+        </div>
+        <p className="text-[13px] text-muted">{formatDate(record.date)}</p>
+      </div>
+
+      <span
+        className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold ${
+          soon ? 'bg-soon text-white' : past ? 'bg-canvas text-muted' : 'bg-primary-soft text-primary-dark'
+        }`}
+      >
+        {badgeText(days)}
+      </span>
       <button
         onClick={onDelete}
-        className="text-sm text-stone-400 hover:text-red-600"
+        className="shrink-0 rounded-full p-1.5 text-muted transition hover:bg-red-50 hover:text-red-600"
         aria-label={`${record.name} kaydını sil`}
+        title="Sil"
       >
-        Sil
+        <TrashIcon />
       </button>
     </li>
+  )
+}
+
+function Section({ title, records, empty, onDelete }: { title: string; records: CareRecord[]; empty: string; onDelete: (r: CareRecord) => void }) {
+  return (
+    <section className="space-y-3">
+      <h3 className="flex items-center gap-2.5 text-xl font-extrabold tracking-tight">
+        {title}
+        <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-extrabold text-primary-dark">
+          {records.length}
+        </span>
+      </h3>
+      {records.length ? (
+        <ul className="space-y-3">
+          {records.map((r) => (
+            <RecordRow key={r.id} record={r} onDelete={() => onDelete(r)} />
+          ))}
+        </ul>
+      ) : (
+        <p className="rounded-[18px] border-2 border-dashed border-line px-4 py-5 text-center text-sm text-muted">{empty}</p>
+      )}
+    </section>
   )
 }
 
@@ -70,22 +105,14 @@ export default function PetDetail({ pet, onBack, onAddRecord, onDeleteRecord }: 
   }
 
   return (
-    <div className="space-y-5">
-      <button onClick={onBack} className="text-sm text-amber-700 hover:underline">
+    <div className="space-y-6">
+      <button onClick={onBack} className="text-sm font-bold text-primary-dark hover:underline">
         ← Hayvanlarım
       </button>
-      <PetCard pet={pet} />
 
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Aşı ve parazit takvimi</h2>
-        {!adding && (
-          <button
-            onClick={() => setAdding(true)}
-            className="rounded-lg bg-amber-500 px-4 py-2 font-medium text-white hover:bg-amber-600"
-          >
-            + Kayıt Ekle
-          </button>
-        )}
+      <div className={`${cardClass} flex flex-wrap items-center justify-between gap-4 p-6`}>
+        <PetSummary pet={pet} large />
+        {!adding && <PrimaryButton onClick={() => setAdding(true)}>+ Kayıt Ekle</PrimaryButton>}
       </div>
 
       {adding && (
@@ -98,27 +125,8 @@ export default function PetDetail({ pet, onBack, onAddRecord, onDeleteRecord }: 
         />
       )}
 
-      <section>
-        <h3 className="mb-2 font-semibold text-stone-600">Yaklaşan ({upcoming.length})</h3>
-        {upcoming.length ? (
-          <ul className="space-y-2">
-            {upcoming.map((r) => <RecordRow key={r.id} record={r} onDelete={() => del(r)} />)}
-          </ul>
-        ) : (
-          <p className="text-sm text-stone-500">Planlanmış uygulama yok.</p>
-        )}
-      </section>
-
-      <section>
-        <h3 className="mb-2 font-semibold text-stone-600">Geçmiş ({past.length})</h3>
-        {past.length ? (
-          <ul className="space-y-2 opacity-80">
-            {past.map((r) => <RecordRow key={r.id} record={r} onDelete={() => del(r)} />)}
-          </ul>
-        ) : (
-          <p className="text-sm text-stone-500">Henüz geçmiş kayıt yok.</p>
-        )}
-      </section>
+      <Section title="Yaklaşan" records={upcoming} empty="Planlanmış uygulama yok." onDelete={del} />
+      <Section title="Geçmiş" records={past} empty="Henüz geçmiş kayıt yok." onDelete={del} />
     </div>
   )
 }
